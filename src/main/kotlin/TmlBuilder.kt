@@ -3,8 +3,10 @@ import androidx.compose.runtime.Composable
 
 object TmlBuilder {
     @Composable
-    fun TmlScope.TmlContainer(content: @Composable TmlScope.() -> Unit) {
-        child("t:container", content)
+    fun TmlContainer(content: @Composable TmlScope.() -> Unit): TmlScope {
+        val scope = TmlScope("t:container")
+        scope.content()
+        return scope
     }
 
     @Composable
