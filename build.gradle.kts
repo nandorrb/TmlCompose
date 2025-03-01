@@ -14,7 +14,9 @@ repositories {
 
 dependencies {
     implementation("androidx.compose.runtime:runtime:1.7.8")
-   testImplementation(kotlin("test"))
+    implementation("org.apache.tapestry:tapestry-core:5.9.0")
+    implementation(kotlin("reflect"))
+    testImplementation(kotlin("test"))
 }
 
 tasks.test {
