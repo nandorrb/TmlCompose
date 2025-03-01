@@ -1,12 +1,9 @@
 import TmlBuilder.div
-import TmlBuilder.form
 import TmlBuilder.p
 import TmlBuilder.span
 import TmlBuilder.td
 import TmlBuilder.th
 import TmlBuilder.tr
-
-
 
 fun main() {
     val newScope2 = TmlScope("t:container").apply {
@@ -18,23 +15,24 @@ fun main() {
             ) {
                 // Additional content inside Form
                 div {
-                    p { "Inside form paragraph" }
-                    span { "Inside form span" }
+                    p { +"Inside form paragraph" } // ✅ Fix: Use `+` to add text content
+                    span { +"Inside form span" } // ✅ Fix: Use `+` to add text content
                 }
             }
 
             tr {
-                td {}
                 th {}
+            }
+            tr {
+                td {}
             }
 
             div {
-                p {}
-                span {}
+                p { +"Outside paragraph" }
+                span { +"Outside span" }
             }
         }
     }
 
     println(newScope2.print())
 }
-

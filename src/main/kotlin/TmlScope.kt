@@ -6,6 +6,7 @@ import java.lang.reflect.Field
 class TmlScope(private val tag: String) {
     private val attributes = mutableMapOf<String, String>()
     private val children = mutableListOf<TmlScope>()
+    private var textContent: String? = null // Stores text content for elements like <p>, <span>
 
     // Provide `t` to enforce Tapestry components access
     val t = TmlTapestryScope(this)
@@ -21,13 +22,20 @@ class TmlScope(private val tag: String) {
         return childScope
     }
 
+    // Allow setting text inside elements
+    operator fun String.unaryPlus() {
+        textContent = this
+    }
+
     fun print(): String {
         val attrString = if (attributes.isNotEmpty()) attributes.entries.joinToString(" ") { """${it.key}="${it.value}"""" } else ""
         val childString = children.joinToString("\n") { it.print() }
-        return if (children.isEmpty()) {
+        val text = textContent?.let { " $it " } ?: ""
+
+        return if (children.isEmpty() && textContent.isNullOrEmpty()) {
             "<$tag${if (attrString.isNotEmpty()) " $attrString" else ""} />"
         } else {
-            "<$tag${if (attrString.isNotEmpty()) " $attrString" else ""}>\n$childString\n</$tag>"
+            "<$tag${if (attrString.isNotEmpty()) " $attrString" else ""}>$text$childString</$tag>"
         }
     }
 }
@@ -89,3 +97,4 @@ class TmlTapestryScope(private val scope: TmlScope) {
         }
     }
 }
+
