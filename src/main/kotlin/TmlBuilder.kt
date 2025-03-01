@@ -1,16 +1,8 @@
 import androidx.compose.runtime.Composable
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.findAnnotation
-
+import java.lang.reflect.Field
 
 @Target(AnnotationTarget.PROPERTY)
 annotation class Parameter(val required: Boolean = false)
-
-@Target(AnnotationTarget.CLASS)
-annotation class SupportsInformalParameters
-
-@Target(AnnotationTarget.CLASS)
-annotation class Events(val value: Array<String>)
 
 object TmlBuilder {
     @Composable
@@ -30,29 +22,40 @@ object TmlBuilder {
         child("th", content)
     }
 
-
-
     @Composable
     fun TmlScope.td(content: @Composable TmlScope.() -> Unit) {
         child("td", content)
     }
 
-
-
-@Composable
-fun TmlScope.TapestryComponent(instance: Any, content: @Composable TmlScope.() -> Unit = {}): TmlScope {
-    val tagName = instance::class.simpleName?.lowercase() ?: "unknown"
-    return child("t:$tagName") {
-        addAttributesFromClass(instance::class.java)
-        content()
+    /**
+     * Accepts a Java class and dynamically extracts parameters.
+     */
+    @Composable
+    fun TmlScope.TapestryComponent(
+        clazz: Class<*>,
+        attributes: Map<String, Any?> = emptyMap(),
+        content: @Composable TmlScope.() -> Unit = {}
+    ) {
+        val tagName = clazz.simpleName.lowercase()
+        child("t:$tagName") {
+            addAttributesFromJavaClass(clazz, attributes)
+            content()
+        }
     }
-}
 
-    fun TmlScope.addAttributesFromClass(clazz: Class<*>) {
-        clazz.kotlin.declaredMemberProperties.forEach { property ->
-            property.findAnnotation<Parameter>()?.let {
-                val name = property.name
-                val value = property.call(this@addAttributesFromClass)?.toString() ?: ""
+    /**
+     * Extracts `@Parameter` annotations from a **Java class** and applies provided attributes.
+     */
+    fun TmlScope.addAttributesFromJavaClass(clazz: Class<*>, attributes: Map<String, Any?>) {
+        for (field: Field in clazz.declaredFields) {
+            field.isAccessible = true  // Allow access to private fields
+
+            // Check if the field has any annotation named "Parameter"
+            val hasParameterAnnotation = field.annotations.any { it.annotationClass.simpleName == "Parameter" }
+
+            if (hasParameterAnnotation) {
+                val name = field.name
+                val value = attributes[name]?.toString() ?: ""
                 attribute("t:$name", value)
             }
         }
