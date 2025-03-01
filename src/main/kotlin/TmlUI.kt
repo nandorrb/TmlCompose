@@ -1,4 +1,3 @@
-import TmlBuilder.TmlContainer
 import TmlBuilder.div
 import TmlBuilder.form
 import TmlBuilder.p
@@ -10,29 +9,32 @@ import TmlBuilder.tr
 
 
 fun main() {
-    val newScope2 = TmlContainer {
-        t.form(
-            zone = "myZone",
-            secure = false,
-            validationId = "myValidationId"
-        ) {
-            // Additional content inside Form
-        }
+    val newScope2 = TmlScope("t:container").apply {
+        t.actionlink(event = "onClick", context = "user123") {
+            t.form(
+                zone = "myZone",
+                secure = false,
+                validationId = "myValidationId"
+            ) {
+                // Additional content inside Form
+                div {
+                    p { "Inside form paragraph" }
+                    span { "Inside form span" }
+                }
+            }
 
-        form {  }
+            tr {
+                td {}
+                th {}
+            }
 
-        tr {
-            td {}
-            th {}
-        }
-        div{
-            p{}
-            span{}
-
+            div {
+                p {}
+                span {}
+            }
         }
     }
 
     println(newScope2.print())
 }
-
 

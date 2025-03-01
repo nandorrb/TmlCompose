@@ -1,4 +1,7 @@
 import androidx.compose.runtime.Composable
+import org.apache.tapestry5.corelib.components.ActionLink
+import org.apache.tapestry5.corelib.components.Form
+import java.lang.reflect.Field
 
 class TmlScope(private val tag: String) {
     private val attributes = mutableMapOf<String, String>()
@@ -30,7 +33,7 @@ class TmlScope(private val tag: String) {
 }
 
 /**
- * `t.` namespace for Tapestry components, restricting their usage to `t.form`, `t.actionLink`, etc.
+ * `t.` namespace for Tapestry components, restricting their usage to `t.form`, `t.actionlink`, etc.
  */
 class TmlTapestryScope(private val scope: TmlScope) {
     @Composable
@@ -41,10 +44,48 @@ class TmlTapestryScope(private val scope: TmlScope) {
         content: @Composable TmlScope.() -> Unit = {}
     ) {
         scope.child("t:form") {
-            if (zone != null) attribute("t:zone", zone)
-            if (secure != null) attribute("t:secure", secure.toString())
-            if (validationId != null) attribute("t:validationId", validationId)
+            addAttributesFromClass(Form::class.java, mapOf(
+                "zone" to zone,
+                "secure" to secure?.toString(),
+                "validationId" to validationId
+            ))
+
             content()
+        }
+    }
+
+    @Composable
+    fun actionlink(
+        event: String? = null,
+        context: String? = null,
+        content: @Composable TmlScope.() -> Unit = {}
+    ) {
+        scope.child("t:actionlink") {
+            addAttributesFromClass(
+                ActionLink::class.java, mapOf(
+                    "event" to event,
+                    "context" to context
+                )
+            )
+
+            content()
+        }
+    }
+
+    private fun TmlScope.addAttributesFromClass(clazz: Class<*>, attributes: Map<String, Any?>) {
+        for (field: Field in clazz.declaredFields) {
+            field.isAccessible = true  // Allow access to private fields
+
+            // Check if the field has @Parameter annotation
+            val hasParameterAnnotation = field.annotations.any { it.annotationClass.simpleName == "Parameter" }
+
+            if (hasParameterAnnotation) {
+                val name = field.name
+                val value = attributes[name]?.toString()
+                if (!value.isNullOrEmpty()) {
+                    attribute("t:$name", value)
+                }
+            }
         }
     }
 }
