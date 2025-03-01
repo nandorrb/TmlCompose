@@ -1,3 +1,5 @@
+import androidx.compose.runtime.Composable
+
 class TmlScope(private val tag: String) {
     private val attributes = mutableMapOf<String, String>()
     private val children = mutableListOf<TmlScope>()

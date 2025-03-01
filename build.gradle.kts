@@ -8,10 +8,13 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    google()
+
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation("androidx.compose.runtime:runtime:1.7.8")
+   testImplementation(kotlin("test"))
 }
 
 tasks.test {

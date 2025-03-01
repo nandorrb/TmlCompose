@@ -1,3 +1,5 @@
+import androidx.compose.runtime.Composable
+
 object TmlBuilder {
     @Composable
     fun TmlContainer(content: @Composable TmlScope.() -> Unit) {
