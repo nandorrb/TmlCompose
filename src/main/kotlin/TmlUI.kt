@@ -1,14 +1,18 @@
-import TmlBuilder.TapestryComponent
 import TmlBuilder.TmlContainer
 import TmlBuilder.td
 import TmlBuilder.th
 import TmlBuilder.tr
-import org.apache.tapestry5.corelib.components.Form
 
+
+import TmlBuilder.form // ✅ Use renamed function
 
 fun main() {
     val newScope2 = TmlContainer {
-        TapestryComponent(Form::class.java, mapOf("zone" to "myZone", "secure" to false, "validationId" to "myValidationId")) {
+        form( // ✅ Fix: Use `FormComponent()` instead of `Form()`
+            zone = "myZone",
+            secure = false,
+            validationId = "myValidationId"
+        ) {
             // Additional content inside Form
         }
 
@@ -20,3 +24,5 @@ fun main() {
 
     println(newScope2.print())
 }
+
+
