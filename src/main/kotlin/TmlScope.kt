@@ -80,6 +80,56 @@ class TmlTapestryScope(private val scope: TmlScope) {
         }
     }
 
+    //These components are loaded in the Tapestry5 core library tapestry_5_4.xsd
+    @Composable
+    fun body(content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:body", content)
+    }
+
+    @Composable
+    fun extend(content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:extend", content)
+    }
+
+    @Composable
+    fun extensionPoint(id: String, content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:extension-point") {
+            attribute("id", id)
+            content()
+        }
+    }
+
+    @Composable
+    fun replace(id: String, content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:replace") {
+            attribute("id", id)
+            content()
+        }
+    }
+
+    @Composable
+    fun content(content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:content", content)
+    }
+
+    @Composable
+    fun remove(content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:remove", content)
+    }
+
+    @Composable
+    fun container(content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:container", content)
+    }
+
+    @Composable
+    fun block(id: String? = null, content: @Composable TmlScope.() -> Unit = {}) {
+        scope.child("t:block") {
+            id?.let { attribute("id", it) }
+            content()
+        }
+    }
+
     private fun TmlScope.addAttributesFromClass(clazz: Class<*>, attributes: Map<String, Any?>) {
         for (field: Field in clazz.declaredFields) {
             field.isAccessible = true  // Allow access to private fields
