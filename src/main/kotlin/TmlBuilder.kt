@@ -21,19 +21,19 @@ object TmlBuilder {
     }
 
     @Composable
-    fun TmlScope.Tr(content: @Composable TmlScope.() -> Unit) {
+    fun TmlScope.tr(content: @Composable TmlScope.() -> Unit) {
         child("tr", content)
     }
 
     @Composable
-    fun TmlScope.Th(content: @Composable TmlScope.() -> Unit) {
+    fun TmlScope.th(content: @Composable TmlScope.() -> Unit) {
         child("th", content)
     }
 
 
 
     @Composable
-    fun TmlScope.Td(content: @Composable TmlScope.() -> Unit) {
+    fun TmlScope.td(content: @Composable TmlScope.() -> Unit) {
         child("td", content)
     }
 
