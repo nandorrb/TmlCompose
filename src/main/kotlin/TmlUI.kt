@@ -7,8 +7,8 @@ import TmlBuilder.Td
 import TmlBuilder.Checkbox
 
 @Composable
-fun TmlUI() {
-    TmlContainer {
+fun TmlUI(scope: TmlScope) {
+    scope.TmlContainer {
         Tr {
             Th { Label(forId = "displayTooltip") }
             Td {
@@ -19,9 +19,9 @@ fun TmlUI() {
 }
 
 fun main() {
-    val output = TmlScope("root").apply {
-        TmlUI()
-    }.print()
+    val rootScope = TmlScope("t:container") // Change from "root" to "t:container"
+    TmlUI(rootScope)
 
+    val output = rootScope.print()
     println(output)
 }

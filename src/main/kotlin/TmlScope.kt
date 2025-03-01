@@ -8,6 +8,7 @@ class TmlScope(private val tag: String) {
         attributes[name] = value
     }
 
+    @Composable
     fun child(tag: String, content: @Composable TmlScope.() -> Unit): TmlScope {
         val childScope = TmlScope(tag).apply(content)
         children.add(childScope)
@@ -15,8 +16,13 @@ class TmlScope(private val tag: String) {
     }
 
     fun print(): String {
-        val attrString = attributes.entries.joinToString(" ") { """${it.key}="${it.value}"""" }
+        val attrString = if (attributes.isNotEmpty()) attributes.entries.joinToString(" ") { """${it.key}="${it.value}"""" } else ""
         val childString = children.joinToString("\n") { it.print() }
-        return if (children.isEmpty()) "<$tag $attrString/>" else "<$tag $attrString>\n$childString\n</$tag>"
+        return if (children.isEmpty()) {
+            "<$tag${if (attrString.isNotEmpty()) " $attrString" else ""} />"
+        } else {
+            "<$tag${if (attrString.isNotEmpty()) " $attrString" else ""}>\n$childString\n</$tag>"
+        }
     }
+
 }
