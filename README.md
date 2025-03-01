@@ -41,17 +41,33 @@ Instead of writing TML manually:
 You can **write this in Kotlin** using **TmlCompose**:
 
 ```kotlin
-@Composable
-fun TmlUI() {
-    TmlContainer {
-        Tr {
-            Th { Label(forId = "displayTooltip") }
-            Td {
-                Checkbox(id = "displayTooltip", value = "viewReport.displayTooltip", className = "modOnCheck")
+    val newScope2 = TmlScope("t:container").apply {
+        t.actionlink(event = "onClick", context = "user123") {
+            t.form(
+                zone = "myZone",
+                secure = false,
+                validationId = "myValidationId"
+            ) {
+                // Additional content inside Form
+                div {
+                    p { +"Inside form paragraph" }
+                    span { +"Inside form span" } 
+                }
+            }
+
+            tr {
+                th {}
+            }
+            tr {
+                td {}
+            }
+
+            div {
+                p { +"Outside paragraph" }
+                span { +"Outside span" }
             }
         }
     }
-}
 ```
 
 This will automatically generate the correct **TML markup**, making it easier to manage complex UIs.
