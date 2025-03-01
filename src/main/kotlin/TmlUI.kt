@@ -1,20 +1,22 @@
 import TmlBuilder.TmlContainer
+import TmlBuilder.form
 import TmlBuilder.td
 import TmlBuilder.th
 import TmlBuilder.tr
 
 
-import TmlBuilder.form // ✅ Use renamed function
 
 fun main() {
     val newScope2 = TmlContainer {
-        form( // ✅ Fix: Use `FormComponent()` instead of `Form()`
+        t.form(
             zone = "myZone",
             secure = false,
             validationId = "myValidationId"
         ) {
             // Additional content inside Form
         }
+
+        form {  }
 
         tr {
             td {}

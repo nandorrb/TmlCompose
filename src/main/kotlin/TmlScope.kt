@@ -4,6 +4,9 @@ class TmlScope(private val tag: String) {
     private val attributes = mutableMapOf<String, String>()
     private val children = mutableListOf<TmlScope>()
 
+    // Provide `t` to enforce Tapestry components access
+    val t = TmlTapestryScope(this)
+
     fun attribute(name: String, value: String) {
         attributes[name] = value
     }
@@ -24,5 +27,24 @@ class TmlScope(private val tag: String) {
             "<$tag${if (attrString.isNotEmpty()) " $attrString" else ""}>\n$childString\n</$tag>"
         }
     }
+}
 
+/**
+ * `t.` namespace for Tapestry components, restricting their usage to `t.form`, `t.actionLink`, etc.
+ */
+class TmlTapestryScope(private val scope: TmlScope) {
+    @Composable
+    fun form(
+        zone: String? = null,
+        secure: Boolean? = null,
+        validationId: String? = null,
+        content: @Composable TmlScope.() -> Unit = {}
+    ) {
+        scope.child("t:form") {
+            if (zone != null) attribute("t:zone", zone)
+            if (secure != null) attribute("t:secure", secure.toString())
+            if (validationId != null) attribute("t:validationId", validationId)
+            content()
+        }
+    }
 }
