@@ -1,5 +1,8 @@
 import TmlBuilder.TmlContainer
+import TmlBuilder.div
 import TmlBuilder.form
+import TmlBuilder.p
+import TmlBuilder.span
 import TmlBuilder.td
 import TmlBuilder.th
 import TmlBuilder.tr
@@ -21,6 +24,11 @@ fun main() {
         tr {
             td {}
             th {}
+        }
+        div{
+            p{}
+            span{}
+
         }
     }
 

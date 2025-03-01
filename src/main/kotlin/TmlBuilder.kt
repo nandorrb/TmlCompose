@@ -123,6 +123,11 @@ object TmlBuilder {
     }
 
     @Composable
+    fun TmlScope.i(content: @Composable TmlScope.() -> Unit) {
+        child("i", content)
+    }
+
+    @Composable
     fun TmlScope.label(content: @Composable TmlScope.() -> Unit) {
         child("label", content)
     }
@@ -187,6 +192,10 @@ object TmlBuilder {
         child("aside", content)
     }
 
+    @Composable
+    fun TmlScope.genericTag(tag: String, content: @Composable TmlScope.() -> Unit) {
+        child(tag, content)
+    }
 
     /**
      * Generic function for any Tapestry component.
