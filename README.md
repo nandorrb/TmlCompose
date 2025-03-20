@@ -30,9 +30,9 @@ Instead of writing TML manually:
 ```xml
 <t:container>
     <tr>
-        <th><t:label for="displayTooltip"/></th>
+        <th><t:label for="displayThree"/></th>
         <td>
-            <t:checkbox t:id="displayTooltip" t:value="viewReport.displayTooltip" class="modOnCheck"/>
+            <t:checkbox t:id="displayThree" t:value="farm.displayThree" class="styling-class"/>
         </td>
     </tr>
 </t:container>
